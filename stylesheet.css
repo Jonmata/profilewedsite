@@ -69,6 +69,28 @@
 #contact_me{
     height: 100vh;
 }
+@media (max-width:600px) {
+    .header_about_me{
+        display: block;
+        margin-left: 7.5%;
+    }
+
+    .one{
+        display: block;
+    }
+    .two{
+        display:block;
+    }
+    #projects{
+        height: auto;
+    }
+    #projects>h2{
+    text-align: left;
+    }
+    #contact_me{
+        height: auto;
+    }
+}
 /* #1D1DD1
 #00FFFF
 #01257D
