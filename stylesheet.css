@@ -1,0 +1,75 @@
+#navbar{
+    background: linear-gradient(50deg,#00FFFF,#2272FF,#01257D );
+    
+}
+.one{
+  display: flex;
+  justify-content: space-evenly; 
+  align-items: center;
+} 
+.two{
+    display: flex;
+    justify-content: space-evenly; 
+    align-items: center;
+}
+.list_of_content{
+    display:flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 10px;
+
+}
+.conInfo{
+    list-style: none;
+}
+.conInfo>li>a{
+    text-decoration: none;
+    color: black;
+}
+.list_of_content>*{
+    color:white;
+    text-decoration: none;
+}
+.header_about_me{
+    display: flex;
+    justify-content: space-evenly;
+    align-items:center;
+    height: 100vh;
+}
+.header_about_me>div{
+    flex-basis: 200px;
+    flex-grow: 0;
+    flex-shrink: 0;
+    
+}
+.contact_container{
+    display: flex;
+    text-align: center;
+    justify-content: center;
+    align-items:center;
+}
+.MVMR{
+    flex: 0 1 200px;
+}
+.my_project_using_boot{
+    flex: 0 0 200px;
+}
+.art_copy{
+    flex: 0 0 200px;
+}
+.tindog{
+    flex: 0 0 200px;
+}
+#projects>h2{
+    text-align: center;
+}
+#projects{
+    height: 100vh;
+}
+#contact_me{
+    height: 100vh;
+}
+/* #1D1DD1
+#00FFFF
+#01257D
+#2272FF */
