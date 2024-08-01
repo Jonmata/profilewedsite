@@ -1,0 +1,79 @@
+/* background */
+body {
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    margin: 0;
+    padding: 0;
+    background:linear-gradient(135deg,black,rgb(54, 54, 54),black);
+    width: 100vh;
+    height: 100vh;
+    display: inline;
+    color: white;
+}
+
+/* nav bar */
+nav{    
+    width: min(1200px,90vw);
+    height: 70px;
+    margin: auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+}
+
+nav a svg{
+    width: 60px;
+    color: white;
+    
+}
+nav a svg:hover{
+    background:rgb(60, 59, 59) ;
+}
+
+nav img{
+    border-radius: 45%;
+    width: 50px;
+}
+
+/* inside the text boxes*/
+main {
+    width: 80%;
+    margin: 2em auto;
+    max-width: 800px;
+}
+
+* div img{
+    height: 300px;
+    width: 250px;
+    float: left;
+    margin: 50px;
+}
+
+.skills, 
+.about,
+.coding {
+    width: 90%;
+    height: 70vh;
+    margin: 2em;
+    padding: 20px;
+    background-color: transparent;
+    border: 10px solid;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+
+/* fade in and out text boxes*/
+
+main div{
+    scale: .5; opacity: 0;
+    animation: fade-in linear forwards;
+    animation-timeline: view();
+    animation-range-start:100px ;
+    animation-range-end: 500px;
+}
+
+@keyframes fade-in {
+    to{scale: 1; opacity: 1;}
+}
