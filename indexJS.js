@@ -15,14 +15,14 @@ prevBtn.onclick = ()=>{
 }
 
 document.getElementById('AboutButton').onclick = () =>{
-    window.location.href = 'aboutMe.html';
+    window.location.href = 'templates/aboutMe.html';
 }
 
 document.getElementById('BlogButton').onclick = ()=>{
-    window.location.href = 'blog.html';
+    window.location.href = 'templates/blog.html';
 }
 document.getElementById('projectButton').onclick = ()=>{
-    window.location.href = 'Projects.html';
+    window.location.href = 'templates/Projects.html';
 }
 
 const setSlider = () =>{
