@@ -77,3 +77,47 @@ main div{
 @keyframes fade-in {
     to{scale: 1; opacity: 1;}
 }
+
+@media all and (max-width: 1024px){
+    * div p{
+        font-size: medium;
+    }
+
+    * div h2{
+        font-size: large;
+    }
+
+    * div h1{
+        font-size: large;
+    }
+    * div img{
+        height: 250px;
+        width: 175px;
+    }
+}
+
+@media all and (max-width: 767px){
+    * div p{
+        font-size: small;
+    }
+
+    * div h2{
+        font-size: medium;
+    }
+
+    * div h1{
+        font-size: medium;
+    }
+
+    * div img{
+        height: 125px;
+        width: 100px;
+    }
+
+    .skills, 
+    .about,
+    .coding {
+        margin-left: 10%;
+        margin-right: 10%;
+    }
+}
