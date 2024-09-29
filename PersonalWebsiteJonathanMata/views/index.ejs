@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Thoughts and skill updates</title>
+    <link rel="stylesheet" href="/styles/blogstylesheet.css" />
+  </head>
+  <body>
+    <nav>
+      <a href="index.html">
+        <svg
+          id="backarrow"
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke-width="1.5"
+          stroke="currentColor"
+          class="size-6"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18"
+          />
+        </svg>
+      </a>
+      <img src="../picturesForWebsite/IMG_8418.jpg" alt="Picture of the creater of the website">
+    </nav>
+    <div id="navbar-placeholder"></div>
+    <div class="main-container">
+      <div class="sidebar">
+        <% if (enter) { %>
+        <div class="new-entry">
+          <button id="new-entry-btn">+ New Entry</button>
+        </div>
+        <% } %>
+        <div id="entries">
+          <% entries.forEach(entry => { %>
+          <div class="entry" data-id="<%= entry.id %>"><%= entry.date %></div>
+          <% }) %>
+        </div>
+      </div>
+      <div class="note-area">
+        <div class="note-header">
+          <h1 id="entry-date">Click one of the side buttons to see the entry.</h1>
+        <form id="update-form" method="POST" action="/updatetext">
+          <% if (enter) { %>
+          <div class="note-meta">
+            <button type="submit">Save now</button>
+          </div>
+          <% } %>
+        </div>
+        <div class="note-content">
+        <input type="hidden" id="entry-id" name="id" value="" />
+          <textarea
+          id="entry-text"
+          name="entrytext"
+          placeholder="entry text area."
+          ></textarea>
+        </div>
+        </form>
+      </div>
+    </div> 
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+      $(document).ready(function () {
+        $(".entry").click(function () {
+          const entryId = $(this).data("id");
+
+          // Make an AJAX POST request to get the entry data
+          $.post("/get-entry", { id: entryId }, function (data) {
+            // Update the H1 and textarea with the received data
+            $("#entry-date").text(data.date);
+            $("#entry-content").val(data.text);
+            $("#entry-id").val(entryId); // Set the entry ID in the form
+            $("#entry-text").val(data.text); // Populate the textarea with entry text
+          }).fail(function () {
+          });
+        });
+
+        // Handle form submission to update the entry
+        $("#update-form").on("submit", function (event) {
+          event.preventDefault(); // Prevent default form submission
+
+          const entryId = $("#entry-id").val(); // Get the stored entry ID
+          const entryText = $("#entry-text").val(); // Get the updated text
+
+          // Send updated text to the server
+          $.post(
+            "/updatetext",
+            { id: entryId, entrytext: entryText },
+            function () {
+              location.reload(); // Optionally reload the page to reflect changes
+            }
+          ).fail(function () {
+          });
+        });
+
+            // Create a new entry
+        $("#new-entry-btn").click(function () {
+            $.post("/newEntry", function () {
+                alert("New entry created!");
+                location.reload(); // Reload the page to reflect the new entry
+            }).fail(function () {
+                alert("You already have a entry for today so update the entry by typing in the text area and press the save now button.");
+            });
+        });
+      });
+    </script>
+  </body>
+</html>

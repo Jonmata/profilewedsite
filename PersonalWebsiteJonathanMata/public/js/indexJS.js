@@ -10,19 +10,19 @@ nextBtn.onclick = () =>{
     setSlider();
 }
 prevBtn.onclick = ()=>{
-    active--;
+    active--;   
     setSlider();
 }
 
 document.getElementById('AboutButton').onclick = () =>{
-    window.location.href = 'templates/aboutMe.html';
+    window.location.href = '/aboutMe.html';
 }
 
 document.getElementById('BlogButton').onclick = ()=>{
-    window.location.href = 'templates/blog.html';
+    window.location.href = '/preBlog.html';
 }
 document.getElementById('projectButton').onclick = ()=>{
-    window.location.href = 'templates/Projects.html';
+    window.location.href = '/Projects.html';
 }
 
 const setSlider = () =>{

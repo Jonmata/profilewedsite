@@ -62,6 +62,17 @@ main {
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
+.about{
+    font-size: large;
+}
+
+.skills{
+    font-size: larger;
+}
+
+.coding{
+    font-size: 15px;
+}
 
 
 /* fade in and out text boxes*/
@@ -79,45 +90,49 @@ main div{
 }
 
 @media all and (max-width: 1024px){
-    * div p{
-        font-size: medium;
-    }
-
-    * div h2{
-        font-size: large;
-    }
-
-    * div h1{
-        font-size: large;
-    }
     * div img{
-        height: 250px;
-        width: 175px;
+        height: 150px;
+        width: 125px;
     }
-}
-
-@media all and (max-width: 767px){
-    * div p{
+    
+    .about{
+        font-size: large;
+    }
+    
+    .skills{
+        font-size: larger;
+    }
+    
+    .coding{
         font-size: small;
     }
 
-    * div h2{
-        font-size: medium;
+    main{
+        margin-right: 18%;
     }
 
-    * div h1{
-        font-size: medium;
-    }
+}
 
+@media all and (max-width: 767px){
     * div img{
-        height: 125px;
-        width: 100px;
+        height: 100px;
+        width: 75px;
+    }
+    
+    .about{
+        font-size: small;
+    }
+    
+    .skills{
+        font-size: medium;
+    }
+    
+    .coding{
+        font-size: 11px;
     }
 
-    .skills, 
-    .about,
-    .coding {
-        margin-left: 10%;
-        margin-right: 10%;
+    main{
+        margin-right: 18%;
     }
+
 }
