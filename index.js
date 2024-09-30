@@ -123,10 +123,18 @@ app.post('/preBlog', async (req, res) => {
         await ensureEntriesTable();
         const result = await db.query('SELECT * FROM entries ORDER BY date DESC');
 
+        // Loop through each entry and format the date
+        const formattedEntries = result.rows.map(entry => {
+            return {
+                ...entry,
+                formattedDate: new Date(entry.date).toLocaleDateString('en-US', options)
+            };
+        });
+
         if (Admin[0].fName === fName && Admin[0].lName === lName && Admin[0].phone === pNum) {
-            res.render('index.ejs', { entries: result.rows, enter: true });
+            res.render('index.ejs', { entries: formattedEntries, enter: true });
         } else {
-            res.render('index.ejs', { entries: result.rows, enter: false });
+            res.render('index.ejs', { entries: formattedEntries, enter: false });
         }   
     } catch (err) {
         console.error(err);
