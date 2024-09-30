@@ -3,19 +3,22 @@ const path = require('path');
 const app = express();
 const bodyParser = require("body-parser");
 const { Pool } = require("pg");
-
 const dotenv = require('dotenv');
+
 dotenv.config();
 
+// Admin credentials
 const Admin = [
     { fName: "jonathan", lName: "mata", phone: "4487" }
 ];
 
+// Middleware
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.set('view engine', 'ejs');
 
+// Database connection pool
 const db = new Pool({  
     user: process.env.DB_USER,
     host: process.env.DB_HOST,
@@ -34,11 +37,8 @@ app.get('/aboutMe.html', (req, res) => res.sendFile(path.join(__dirname, 'public
 app.get('/Projects.html', (req, res) => res.sendFile(path.join(__dirname, 'public', 'pages', 'Projects.html')));
 app.get('/preBlog.html', (req, res) => res.sendFile(path.join(__dirname, 'public', 'pages', 'preBlog.html')));
 
-// Create table if it doesn't exist, then get entry by ID
-app.post('/get-entry', async (req, res) => {
-    const entryId = req.body.id;
-
-    // First, try to create the table if it doesn't exist
+// Function to ensure the 'entries' table exists
+const ensureEntriesTable = async () => {
     const createTableQuery = `
         CREATE TABLE IF NOT EXISTS entries (
             id SERIAL PRIMARY KEY,
@@ -48,55 +48,13 @@ app.post('/get-entry', async (req, res) => {
     `;
 
     try {
-        // Create the table if it doesn't exist
         await db.query(createTableQuery);
-
-        try {
-            // Create the table if it doesn't exist
-            await db.query(createTableQuery);
-            console.log('Table "entries" checked/created successfully.');
-        } catch (createTableError) {
-            console.error('Error creating table:', createTableError);
-            return res.status(500).send('Error creating table');
-        }
-
-        // Check if the table exists
-        const checkTableQuery = `
-            SELECT to_regclass('public.entries') AS table_exists;
-        `;
-        const checkResult = await db.query(checkTableQuery);
-        console.log('Table existence:', checkResult.rows[0]);
-
-        // Now try to retrieve the entry by ID
-        const result = await db.query('SELECT * FROM entries WHERE id = $1', [entryId]);
-        
-        if (result.rows.length > 0) {
-            // Entry found, send it as JSON
-            res.json(result.rows[0]);
-        } else {
-            // Entry not found
-            res.status(404).send('Entry not found');
-        }
-    } catch (err) {
-        console.error('Error occurred:', err);
-        res.status(500).send('An error occurred while fetching the entry or creating the table.');
+        console.log('Table "entries" checked/created successfully.');
+    } catch (error) {
+        console.error('Error creating table:', error);
+        throw new Error('Failed to create table');
     }
-});
-
-
-// Update an entry by ID
-app.post("/updatetext", async (req, res) => {
-    const entryId = req.body.id;
-    const entryText = req.body.entrytext;
-
-    try {
-        await db.query("UPDATE entries SET text = $1 WHERE id = $2", [entryText, entryId]);
-        res.send("Entry updated successfully");
-    } catch (err) {
-        console.error(err);
-        res.status(500).send('Error occurred while updating');
-    }
-});
+};
 
 // Create a new entry
 app.post("/newEntry", async (req, res) => {
@@ -105,6 +63,8 @@ app.post("/newEntry", async (req, res) => {
     const formattedDate = currentDate.toLocaleDateString('en-US', options);
 
     try {
+        await ensureEntriesTable();
+
         const existingEntry = await db.query("SELECT * FROM entries WHERE date = $1", [formattedDate]);
         if (existingEntry.rows.length > 0) {
             return res.status(400).send("An entry with today's date already exists.");
@@ -121,14 +81,51 @@ app.post("/newEntry", async (req, res) => {
     }
 });
 
-// Handle login form submission and determine access level
-app.post('/preBlog', async (req, res) => {
-    const { fName, lName, pNum} = req.body;
+// Get entry by ID
+app.post('/get-entry', async (req, res) => {
+    const entryId = req.body.id;
+
     try {
+        await ensureEntriesTable();
+
+        const result = await db.query('SELECT * FROM entries WHERE id = $1', [entryId]);
+        
+        if (result.rows.length > 0) {
+            res.json(result.rows[0]);
+        } else {
+            res.status(404).send('Entry not found');
+        }
+    } catch (err) {
+        console.error('Error occurred:', err);
+        res.status(500).send('An error occurred while fetching the entry.');
+    }
+});
+
+// Update an entry by ID
+app.post("/updatetext", async (req, res) => {
+    const entryId = req.body.id;
+    const entryText = req.body.entrytext;
+
+    try {
+        await db.query("UPDATE entries SET text = $1 WHERE id = $2", [entryText, entryId]);
+        res.send("Entry updated successfully");
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Error occurred while updating');
+    }
+});
+
+// Handle login form submission
+app.post('/preBlog', async (req, res) => {
+    const { fName, lName, pNum } = req.body;
+
+    try {
+        await ensureEntriesTable();
         const result = await db.query('SELECT * FROM entries ORDER BY date DESC');
-        if(Admin[0].fName==fName && Admin[0].lName==lName && Admin[0].phone == pNum){//by doing this it compares the val of the objects and not refrence address
+
+        if (Admin[0].fName === fName && Admin[0].lName === lName && Admin[0].phone === pNum) {
             res.render('index.ejs', { entries: result.rows, enter: true });
-        }else{
+        } else {
             res.render('index.ejs', { entries: result.rows, enter: false });
         }   
     } catch (err) {
@@ -137,7 +134,7 @@ app.post('/preBlog', async (req, res) => {
     }
 });
 
-// Start the server on port 3000
+// Start the server
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
