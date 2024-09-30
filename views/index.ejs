@@ -37,7 +37,7 @@
         <% } %>
         <div id="entries">
           <% entries.forEach(entry => { %>
-          <div class="entry" data-id="<%= entry.title %>"><%= entry.formattedDate %></div>
+          <div class="entry" data-id="<%= entry.id %>"><%= entry.formattedDate %></div>
           <% }) %>
         </div>
       </div>
@@ -71,7 +71,7 @@
           // Make an AJAX POST request to get the entry data
           $.post("/get-entry", { id: entryId }, function (data) {
             // Update the H1 and textarea with the received data
-            $("#entry-date").text(data.date);
+            $("#entry-date").text(data.formattedDate);
             $("#entry-content").val(data.text);
             $("#entry-id").val(entryId); // Set the entry ID in the form
             $("#entry-text").val(data.text); // Populate the textarea with entry text
