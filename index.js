@@ -123,6 +123,9 @@ app.post('/preBlog', async (req, res) => {
         await ensureEntriesTable();
         const result = await db.query('SELECT * FROM entries ORDER BY date DESC');
 
+        // Format the date options for the frontend
+        const options = { year: 'numeric', month: 'long', day: 'numeric' };
+
         // Loop through each entry and format the date
         const formattedEntries = result.rows.map(entry => {
             return {
