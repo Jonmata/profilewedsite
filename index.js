@@ -21,11 +21,7 @@ const db = new Pool({
     host: process.env.DB_HOST,
     database: process.env.DB_DATABASE,
     password: process.env.DB_PASSWORD,
-    port: process.env.DB_PORT,
-    ssl: {
-        rejectUnauthorized: false     // For cloud-hosted databases like Render (set as required)
-      }
-      
+    port: process.env.DB_PORT
 });
 
 // Serve static HTML pages
