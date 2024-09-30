@@ -134,6 +134,8 @@ app.post('/preBlog', async (req, res) => {
             };
         });
 
+        console.log(formattedEntries);
+        
         if (Admin[0].fName === fName && Admin[0].lName === lName && Admin[0].phone === pNum) {
             res.render('index.ejs', { entries: formattedEntries, enter: true });
         } else {
