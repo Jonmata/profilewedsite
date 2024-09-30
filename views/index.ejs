@@ -70,8 +70,12 @@
 
           // Make an AJAX POST request to get the entry data
           $.post("/get-entry", { id: entryId }, function (data) {
+
+                    // Format the date options for the frontend
+            const options = { year: 'numeric', month: 'long', day: 'numeric' };
+            const dataFormatted = new Date(entry.date).toLocaleDateString('en-US', options)
             // Update the H1 and textarea with the received data
-            $("#entry-date").text(data.formattedDate);
+            $("#entry-date").text(dataFormatted);
             $("#entry-content").val(data.text);
             $("#entry-id").val(entryId); // Set the entry ID in the form
             $("#entry-text").val(data.text); // Populate the textarea with entry text
