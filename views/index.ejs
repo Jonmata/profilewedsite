@@ -73,7 +73,7 @@
 
                     // Format the date options for the frontend
             const options = { year: 'numeric', month: 'long', day: 'numeric' };
-            const dataFormatted = new Date(entry.date).toLocaleDateString('en-US', options)
+            const dataFormatted = new Date(data.date).toLocaleDateString('en-US', options)
             // Update the H1 and textarea with the received data
             $("#entry-date").text(dataFormatted);
             $("#entry-content").val(data.text);
