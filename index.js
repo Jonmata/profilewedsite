@@ -25,6 +25,7 @@ const db = new Pool({
     ssl: {
         rejectUnauthorized: false     // For cloud-hosted databases like Render (set as required)
       }
+      
 });
 
 // Serve static HTML pages
