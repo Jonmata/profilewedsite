@@ -34,21 +34,39 @@ app.get('/aboutMe.html', (req, res) => res.sendFile(path.join(__dirname, 'public
 app.get('/Projects.html', (req, res) => res.sendFile(path.join(__dirname, 'public', 'pages', 'Projects.html')));
 app.get('/preBlog.html', (req, res) => res.sendFile(path.join(__dirname, 'public', 'pages', 'preBlog.html')));
 
-// Get an entry by ID
+// Create table if it doesn't exist, then get entry by ID
 app.post('/get-entry', async (req, res) => {
     const entryId = req.body.id;
+
+    // First, try to create the table if it doesn't exist
+    const createTableQuery = `
+        CREATE TABLE IF NOT EXISTS entries (
+            id SERIAL PRIMARY KEY,
+            date DATE NOT NULL,
+            text TEXT NOT NULL
+        );
+    `;
+
     try {
+        // Create the table if it doesn't exist
+        await db.query(createTableQuery);
+
+        // Now try to retrieve the entry by ID
         const result = await db.query('SELECT * FROM entries WHERE id = $1', [entryId]);
+        
         if (result.rows.length > 0) {
-            res.json(result.rows[0]); // Send the entry data as JSON
+            // Entry found, send it as JSON
+            res.json(result.rows[0]);
         } else {
+            // Entry not found
             res.status(404).send('Entry not found');
         }
     } catch (err) {
-        console.error(err);
-        res.status(500).send('Error occurred while fetching entry');
+        console.error('Error occurred:', err);
+        res.status(500).send('An error occurred while fetching the entry or creating the table.');
     }
 });
+
 
 // Update an entry by ID
 app.post("/updatetext", async (req, res) => {
