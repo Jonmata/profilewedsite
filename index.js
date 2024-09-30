@@ -51,6 +51,22 @@ app.post('/get-entry', async (req, res) => {
         // Create the table if it doesn't exist
         await db.query(createTableQuery);
 
+        try {
+            // Create the table if it doesn't exist
+            await db.query(createTableQuery);
+            console.log('Table "entries" checked/created successfully.');
+        } catch (createTableError) {
+            console.error('Error creating table:', createTableError);
+            return res.status(500).send('Error creating table');
+        }
+
+        // Check if the table exists
+        const checkTableQuery = `
+            SELECT to_regclass('public.entries') AS table_exists;
+        `;
+        const checkResult = await db.query(checkTableQuery);
+        console.log('Table existence:', checkResult.rows[0]);
+
         // Now try to retrieve the entry by ID
         const result = await db.query('SELECT * FROM entries WHERE id = $1', [entryId]);
         
